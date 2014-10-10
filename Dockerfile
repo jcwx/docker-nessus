@@ -2,7 +2,7 @@
 #
 # VERSION               0.0.1
 
-FROM centos:6
+FROM centos:centos6
 
 # https://github.com/jcwx
 MAINTAINER JC Weir "jweir@ise.com"
