@@ -6,4 +6,4 @@ FROM    busybox
 MAINTAINER JC Weir "jweir@ise.com"
 VOLUME  /opt/nessus-persist
 
-CMD    /bin/sh
+CMD    /bin/true
