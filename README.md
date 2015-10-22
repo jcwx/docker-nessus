@@ -58,6 +58,7 @@ Backup to S3 from running docker container
 Populate the environment varibles with the keys for the IAM user you set up
 
 export AWS_ACCESS_KEY_ID=AK*****************3Q
+
 export AWS_SECRET_ACCESS_KEY=wk**************************************p
 
 then run
