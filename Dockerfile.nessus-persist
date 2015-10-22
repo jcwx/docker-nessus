@@ -1,7 +1,0 @@
-# data volume
-#
-# VERSION               0.0.1
-
-FROM    scratch
-MAINTAINER JC Weir "jweir@ise.com"
-VOLUME  /opt/nessus-persist/
