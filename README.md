@@ -16,7 +16,7 @@ global.db-wal
 
 global.db-shm
 
-tar -cvzf nessus.tgz --exclude=/opt/nessus/var/nessus/users/admin/reports /opt/nessus/var/nessus/users/ /opt/nessus/var/nessus/policies.db /opt/nessus/var/nessus/master.key /opt/nessus/var/nessus/global.db /opt/nessus/etc/nessus/nessus-fetch.db /opt/nessus/etc/nessus/nessusd.db /opt/nessus/etc/nessus/nessusd.conf.imported /opt/nessus/etc/nessus/nessusd.rules
+`tar -cvzf nessus.tgz --exclude=/opt/nessus/var/nessus/users/admin/reports /opt/nessus/var/nessus/users/ /opt/nessus/var/nessus/policies.db /opt/nessus/var/nessus/master.key /opt/nessus/var/nessus/global.db /opt/nessus/etc/nessus/nessus-fetch.db /opt/nessus/etc/nessus/nessusd.db /opt/nessus/etc/nessus/nessusd.conf.imported /opt/nessus/etc/nessus/nessusd.rules`
 
 Place the nessus.tgz in the directory where your Dockerfile is located. When the Nessus Docker container is built, the nessus.tgz file will be extracted to the proper location
 
@@ -35,7 +35,7 @@ If you're on your first install, you'll have to create an empty nessus.tgz file.
 
 To create a backup locally from the running docker container:
 
-docker run --volumes-from (CONTAINER ID) -v $(pwd):/backup debian tar -cvzf /backup/nessus.tgz --exclude=/opt/nessus/var/nessus/users/admin/reports /opt/nessus/var/nessus/users/ /opt/nessus/var/nessus/policies.db /opt/nessus/var/nessus/master.key /opt/nessus/var/nessus/global.db /opt/nessus/etc/nessus/nessus-fetch.db /opt/nessus/etc/nessus/nessusd.db /opt/nessus/etc/nessus/nessusd.conf.imported /opt/nessus/etc/nessus/nessusd.rules
+`docker run --volumes-from (CONTAINER ID) -v $(pwd):/backup debian tar -cvzf /backup/nessus.tgz --exclude=/opt/nessus/var/nessus/users/admin/reports /opt/nessus/var/nessus/users/ /opt/nessus/var/nessus/policies.db /opt/nessus/var/nessus/master.key /opt/nessus/var/nessus/global.db /opt/nessus/etc/nessus/nessus-fetch.db /opt/nessus/etc/nessus/nessusd.db /opt/nessus/etc/nessus/nessusd.conf.imported /opt/nessus/etc/nessus/nessusd.rules`
 
 ### Amazon S3 storage for backup
 
