@@ -63,6 +63,6 @@ export AWS_SECRET_ACCESS_KEY=wk**************************************p
 
 then run
 
-docker run --volumes-from c92e39881791 -v $(pwd):/backup debian tar -cvzf - --exclude=/opt/nessus/var/nessus/users/admin/reports /opt/nessus/var/nessus/users/ /opt/nessus/var/nessus/policies.db /opt/nessus/var/nessus/master.key /opt/nessus/var/nessus/global.db /opt/nessus/etc/nessus/nessus-fetch.db /opt/nessus/etc/nessus/nessusd.db /opt/nessus/etc/nessus/nessusd.conf.imported /opt/nessus/etc/nessus/nessusd.rules | ./gof3r put -b nessus-bak -k nessus.tgz
+docker run --volumes-from c92e39881791 -v $(pwd):/backup debian tar -cvzf - --exclude=/opt/nessus/var/nessus/users/admin/reports /opt/nessus/var/nessus/users/ /opt/nessus/var/nessus/policies.db /opt/nessus/var/nessus/master.key /opt/nessus/var/nessus/global.db /opt/nessus/etc/nessus/nessus-fetch.db /opt/nessus/etc/nessus/nessusd.db /opt/nessus/etc/nessus/nessusd.conf.imported /opt/nessus/etc/nessus/nessusd.rules | ./gof3r put -b nessus-bak -k nessus.tgz`
 
 Although this is rather wordy, the actual process of backing up and restoring the Nessus config is rather straightforward and simple.  
