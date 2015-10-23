@@ -10,7 +10,7 @@ This Nessus docker setup allows you to import an existing configuration.  I was 
 
 To package the data needed from a present Nessus installation, you can use this command:
 
-I don't believe these files exist in Nessus 5.
+I don't believe these files exist in Nessus 5. (they're mentioned in the backup instructions from Tenable)
 
 global.db-wal
 
