@@ -45,11 +45,11 @@ https://github.com/rlmcpherson/s3gof3r
 
 in order to complete this process.
 
-Rename Dockerfile.Amazon_S3 to Dockerfile, and populate the environment keys, plus change the bucket 
+Rename Dockerfile.Amazon_S3 to Dockerfile, and populate the environment keys, plus change the bucket to your destination from what I have here (my bucket is named 'nessus-bak')
 
 -b nessus-bak  
 
-to reflect the name of your bucket, and also rename the tarball
+'nessus.tgz' is the name of my backup tarball
 
 -k nessus.tgz
 
