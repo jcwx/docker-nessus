@@ -1,0 +1,26 @@
+#!/bin/sh
+
+[Unit]
+Description=Backup of running Nessus container
+
+[Service]
+Type=oneshot
+ExecStartPre=
+ExecStart=/bin/bash -c \
+   'if { ( /usr/bin/docker ps -a | grep bak-ness ) } ; then \
+         ( /usr/bin/docker ps -a | grep bak-ness | head -1 \
+           | awk \'{ print $1 }\' | xargs docker start ) ; else \
+           /usr/bin/docker run --name bak-ness \
+           --volumes-from nessus \
+           -v /home/core:/backup debian \
+           tar -cvzf /backup/nessus.tgz \
+           --exclude=/opt/nessus/var/nessus/users/admin/reports \
+           /opt/nessus/var/nessus/users/ \
+           /opt/nessus/var/nessus/policies.db \
+           /opt/nessus/var/nessus/master.key \
+           /opt/nessus/var/nessus/global.db \
+           /opt/nessus/etc/nessus/nessus-fetch.db \
+           /opt/nessus/etc/nessus/nessusd.db \
+           /opt/nessus/etc/nessus/nessusd.conf.imported \
+           /opt/nessus/etc/nessus/nessusd.rules ; \
+     fi'
