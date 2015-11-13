@@ -1,0 +1,34 @@
+#!/bin/sh
+
+[Unit]
+Description=generate local backup of Nessus container, copy to Amazon S3
+
+[Service]
+Environment=AWS_ACCESS_KEY_ID=A***********************
+Environment=AWS_SECRET_ACCESS_KEY=b******************************************
+Type=oneshot
+ExecStartPre=
+ExecStart=/bin/bash -c \
+   'if { ( /usr/bin/docker ps -a | grep bak-ness-s3 ) } ; then \
+         ( /usr/bin/docker ps -a | grep bak-ness-s3 | head -1 \
+           | awk \'{ print $1 }\' | xargs docker start ) ; else \
+           /usr/bin/docker run --name bak-ness-s3 \
+           --volumes-from nessus \
+           -v /home/core:/backup debian \
+           tar -cvzf /backup/nessus-s3.tgz \
+           /opt/nessus/var/nessus/users/ \
+           /opt/nessus/var/nessus/policies.db \
+           /opt/nessus/var/nessus/master.key \
+           /opt/nessus/var/nessus/global.db \
+           /opt/nessus/etc/nessus/nessus-fetch.db \
+           /opt/nessus/etc/nessus/nessusd.db \
+           /opt/nessus/etc/nessus/nessusd.conf.imported \
+           /opt/nessus/etc/nessus/nessusd.rules ; \
+     fi'
+ExecStopPost=/home/core/gof3r put -p /home/core/nessus-s3.tgz \
+                                  -b nessus-bak -k nessus-s3.tgz
+ExecStopPost=/bin/bash -c \
+   'if { ( /usr/bin/docker ps -a | grep bak-ness-s3 ) } ; then \
+         ( /usr/bin/docker ps -a | grep bak-ness-s3 | head -1 \
+           | awk \'{ print $1 }\' | xargs docker rm ) ; \
+    fi'
