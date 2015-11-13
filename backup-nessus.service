@@ -24,3 +24,8 @@ ExecStart=/bin/bash -c \
            /opt/nessus/etc/nessus/nessusd.conf.imported \
            /opt/nessus/etc/nessus/nessusd.rules ; \
      fi'
+ExecStopPost=/bin/bash -c \
+   'if { ( /usr/bin/docker ps -a | grep bak-ness ) } ; then \
+         ( /usr/bin/docker ps -a | grep bak-ness | head -1 \
+           | awk \'{ print $1 }\' | xargs docker rm ) ; \
+     fi'
