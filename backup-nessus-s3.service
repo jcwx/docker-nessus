@@ -25,8 +25,9 @@ ExecStart=/bin/bash -c \
            /opt/nessus/etc/nessus/nessusd.conf.imported \
            /opt/nessus/etc/nessus/nessusd.rules ; \
      fi'
-ExecStopPost=/home/core/gof3r put -p /home/core/nessus-s3.tgz \
-                                  -b nessus-bak -k nessus-s3.tgz
+ExecStopPost=/bin/bash -c \
+           '/home/core/gof3r put -p /home/core/nessus-s3.tgz \
+           -b nessus-bak -k nessus-s3_"$(date +"%F_%T_%Z")".tgz'
 ExecStopPost=/bin/bash -c \
    'if { ( /usr/bin/docker ps -a | grep bak-ness-s3 ) } ; then \
          ( /usr/bin/docker ps -a | grep bak-ness-s3 | head -1 \
