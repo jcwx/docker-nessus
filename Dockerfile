@@ -14,6 +14,7 @@ MAINTAINER JC Weir "jweir@ise.com"
 
 # or store the image locally on Docker host and install from there
 #
+ADD ./Nessus-6.4.3-es6.x86_64.rpm /Nessus-6.4.3-es6.x86_64.rpm
 RUN rpm -ivh Nessus-6.4.3-es6.x86_64.rpm
 
 # add the locally stored backup to the docker image
