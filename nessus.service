@@ -1,0 +1,21 @@
+[Unit]
+Description=nessus
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c \
+   'if { ( /usr/bin/docker ps -a | grep nessus ) } ; then \
+         ( /usr/bin/docker start nessus ) ; else \
+           /usr/bin/docker run -p 8834:8834 \
+            --mac-address F4:CE:46:7E:71:B0 \
+            -d --name nessus core/nessus ; \
+    fi'
+ExecStop=/usr/bin/docker stop %n
+RemainAfterExit=yes
+RestartSec=20m
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
