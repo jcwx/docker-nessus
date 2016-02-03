@@ -5,6 +5,8 @@ This is an instance of a Docker container running Nessus.  There are a few optio
 
 I have only tested this Nessus container on a CoreOS host.  The systemd services for running the backups should run on any systemd based host.  If you're using a host that is using SysV/BSD init script system then you will have to create scripts by adapting the systemd service files and schedule them with cron.  
 
+##### NOTE: I wrote a nessus.service file that I had not included in the instructions here nor provided the file itself. I added it and will provide a bit of insight into using it to maintain the Nessus service.  The service created will allow you to start and stop the container as well as starting the container on boot of the host system -- as long as the host system uses systemd, that is.
+
 Steps
 -----
 
