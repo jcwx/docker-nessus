@@ -10,9 +10,9 @@ ExecStart=/bin/bash -c \
          ( /usr/bin/docker start nessus ) ; else \
            /usr/bin/docker run -p 8834:8834 \
             --mac-address F4:CE:46:7E:71:B0 \
-            -d --name nessus core/nessus ; \
+            --name nessus core/nessus ; \
     fi'
-ExecStop=/usr/bin/docker stop %n
+ExecStop=/usr/bin/docker stop nessus
 RemainAfterExit=yes
 RestartSec=20m
 Restart=always
