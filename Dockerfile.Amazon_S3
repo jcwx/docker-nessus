@@ -9,14 +9,14 @@ MAINTAINER JC Weir "jweir@ise.com"
 #
 # http://www.tenable.com/products/nessus/select-your-operating-system
 #
-RUN rpm -ivh http://10.22.88.22/Nessus-6.4.3-es6.x86_64.rpm
+# RUN rpm -ivh http://10.22.88.22/Nessus-6.4.3-es6.x86_64.rpm
 
 # or store the image locally and install from there
 #
-# ADD ./Nessus-6.4.3-es6.x86_64.rpm /Nessus-6.4.3-es6.x86_64.rpm
-# RUN rpm -ivh Nessus-6.4.3-es6.x86_64.rpm
+ADD ./Nessus-6.4.3-es6.x86_64.rpm /Nessus-6.4.3-es6.x86_64.rpm
+RUN rpm -ivh Nessus-6.4.3-es6.x86_64.rpm
 
-# needed to extract the backup in the docker container
+# needed package to extract the backup in the docker container
 # after pulling it from Amazon S3
 #
 RUN yum install -y tar
