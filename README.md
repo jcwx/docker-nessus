@@ -52,6 +52,8 @@ https://(your-host-ip):8834
 
 ### _(OPTIONAL)_ Create Local Host Backup Service
 
+This service writes a gzip compressed tarball file locally.
+
   * (as root) copy `backup-nessus.service` and `backup-nessus.timer` to `/etc/systemd/system` directory
   * run `systemctl daemon-reload && systemctl start backup-nessus.service` (should generate a nessus.tgz backup in '/home/core' or wherever you're running docker)
   * run `systemctl start backup-nessus.timer` (is configured to run every hour)
@@ -59,6 +61,8 @@ https://(your-host-ip):8834
   * run `systemctl daemon-reload && systemctl restart backup-nessus-s3.service`
 
 ### _(OPTIONAL)_ Create Amazon S3 Backup Service
+
+This service writes a gzip compressed tarball file locally, then copies it to Amazon S3 with the gof3r command.
 
   * retrieve the gof3r binary from https://github.com/rlmcpherson/s3gof3r
   * (as root) copy `backup-nessus-s3.service` and `backup-nessus-s3.timer` to `/etc/systemd/system` directory
@@ -69,7 +73,9 @@ https://(your-host-ip):8834
   * edit line #8 to adjust backup cycle 
   * run `systemctl daemon-reload && systemctl restart backup-nessus-s3.service`
 
-### _(OPTIONAL)_ Create Image from Amazon S3 Backup
+### _(OPTIONAL)_ Create Docker Image from Amazon S3 Backup
+
+This process will create a new Docker image from a backup stored on Amazon S3.
 
   * copy Nessus rpm to docker host
   * copy Dockerfile.Amazon_S3 to your docker host
