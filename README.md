@@ -36,6 +36,7 @@ Steps
 
   * use the MAC from the backup process mentioned earlier
   * `docker run -p 8834:8834 --mac-address F4:CE:46:7E:71:B0 --name=nessus -d nessus`
+  * use docker command to manage the container (`docker restart <container>` for instance)
 
 ### *OR* Create Systemd Nessus Service
 
