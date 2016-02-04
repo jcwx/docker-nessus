@@ -1,5 +1,3 @@
-#!/bin/sh
-
 [Unit]
 Description=generate local backup of Nessus container, copy to Amazon S3
 
