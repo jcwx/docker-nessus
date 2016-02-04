@@ -5,7 +5,7 @@ This is an instance of a Docker container running Nessus.  There are a few optio
 
 I have only tested this Nessus container on a CoreOS host.  The systemd services for running the backups should run on any systemd based host.  If you're using a host that is using SysV/BSD init script system then you will have to create scripts by adapting the systemd service files and schedule them with cron.  
 
-##### NOTE: I wrote a nessus.service file that I had not included in the instructions here nor provided the file itself. I added it and will provide a bit of insight into using it to maintain the Nessus service.  The service created will allow you to start and stop the container as well as starting the container on boot of the host system -- as long as the host system uses systemd, that is.
+##### *NOTE:* All docker activity in these various services and Dockerfiles is run from `/home/core`.  This is the default user on CoreOS instances.  If you're using another Linux based host (or whatever) you'll have to make adjustments to the config files I have here in this repo to account for the home directory you're using or where you might be running docker.
 
 Steps
 -----
@@ -27,54 +27,57 @@ Steps
 
   * copy nessus.tgz tarball to docker host
   * copy Nessus rpm to docker host
+  * rename the rpm file name in the Dockerfile to represent the rpm you are using
   * copy Dockerfile from this repo to your Docker host
   * review comments and alter Dockerfile to suit your needs
   * `docker build -t nessus .`
 
 ### Create Docker Nessus Container
 
-  * use the MAC from the backup process
+  * use the MAC from the backup process mentioned earlier
   * `docker run -p 8834:8834 --mac-address F4:CE:46:7E:71:B0 --name=nessus -d nessus`
+
+### *OR* Create Systemd Nessus Service
+
+  * copy `nessus.service` to `/etc/systemd/system`
+  * edit `nessus.service` and replace the MAC on line #12 with MAC address from the backup process mentioned earlier (if needed), otherwise delete line #12
+  * run `systemctl daemon-reload && systemctl start nessus`
+ 
+The docker container can now be managed by the systemd service.  You can start, restart, get status or whatever is available with the `systemctl` command.  The docker service will also start at boot and be shut down properly when the host system is cycled.  
  
 You can now log into your running Nessus instance at:
 
 https://(your-host-ip):8834
 
-### Configure Required Backup
+### Create Local Host Backup Service
 
-  * (as root) copy 'backup-nessus.service' and 'backup-nessus.timer' to /etc/systemd/system directory
+  * (as root) copy `backup-nessus.service` and `backup-nessus.timer` to `/etc/systemd/system` directory
   * run `systemctl daemon-reload && systemctl start backup-nessus.service` (should generate a nessus.tgz backup in '/home/core' or wherever you're running docker)
   * run `systemctl start backup-nessus.timer` (is configured to run every hour)
-  * OPTIONAL - use S3 service files (backup-nessus-s3.service, backup-nessus-s3.timer) instead, follow notes in files
+  * edit line #8 to adjust backup cycle 
+  * run `systemctl daemon-reload && systemctl restart backup-nessus-s3.service`
 
+### Create Amazon S3 Backup Service
 
+  * retrieve the gof3r binary from https://github.com/rlmcpherson/s3gof3r
+  * (as root) copy `backup-nessus-s3.service` and `backup-nessus-s3.timer` to `/etc/systemd/system` directory
+  * populate the environment keys in `backup-nessus-s3.service` with your Amazon S3 keys (lines #5 & #6)
+  * change the destination bucket on line #28 (see the `-b` flag) to reflect the bucket name you have at Amazon S3 for this task -- you will replace `nessus-bak` with your bucket name
+  * the tarball written in S3 will be named `nessus-s3_<date>.tgz`
+  * run `systemctl start backup-nessus-s3.timer` (is configured to run every hour)
+  * edit line #8 to adjust backup cycle 
+  * run `systemctl daemon-reload && systemctl restart backup-nessus-s3.service`
 
-### Amazon S3 storage for backup <--- these instructions need to be cleaned up yet
+### Create Image from Amazon S3 Backup
 
-You will need to retrieve the gof3r binary from 
+  * copy Nessus rpm to docker host
+  * copy Dockerfile.Amazon_S3 to your docker host
+  * rename Dockerfile.Amazon_S3 to Dockerfile
+  * get gof3r binary from https://github.com/rlmcpherson/s3gof3r, place in local docker directory
+  * rename the rpm file name in the Dockerfile to represent the rpm you are using
+  * populate the environment keys with your Amazon S3 keys (lines #33 & #34)
+  * change the destination bucket on line #39 (see the `-b` flag) to reflect the bucket name you have at Amazon S3 for this task -- you will replace `nessus-bak` with your bucket name
+  * review other comments and alter Dockerfile to suit your needs
+  * `docker build -t nessus .`
 
-https://github.com/rlmcpherson/s3gof3r
-
-in order to complete this process.
-
-Rename Dockerfile.Amazon_S3 to Dockerfile, and populate the environment keys, plus change the bucket to your destination from what I have here (my bucket is named 'nessus-bak')
-
--b nessus-bak  
-
-'nessus.tgz' is the name of my backup tarball
-
--k nessus.tgz
-
-#### Backup to S3 from running docker container
-
-Populate the environment varibles with the keys for the IAM user you set up
-
-export AWS_ACCESS_KEY_ID=AK*****************3Q
-
-export AWS_SECRET_ACCESS_KEY=wk**************************************p
-
-then run
-
-`docker run --volumes-from c92e39881791 -v $(pwd):/backup debian tar -cvzf - --exclude=/opt/nessus/var/nessus/users/admin/reports /opt/nessus/var/nessus/users/ /opt/nessus/var/nessus/policies.db /opt/nessus/var/nessus/master.key /opt/nessus/var/nessus/global.db /opt/nessus/etc/nessus/nessus-fetch.db /opt/nessus/etc/nessus/nessusd.db /opt/nessus/etc/nessus/nessusd.conf.imported /opt/nessus/etc/nessus/nessusd.rules | ./gof3r put -b nessus-bak -k nessus.tgz`
-
-Although this is rather wordy, the actual process of backing up and restoring the Nessus config is rather straightforward and simple.  
+ 
