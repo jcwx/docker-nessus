@@ -16,7 +16,7 @@ Steps
  
 * **Create Docker Nessus Container**: Run Docker Nessus image to create container
  
-* **Configure Required Backup**: Copy provided systemd service files to CoreOS host to enable scheduled backup
+* **Configure Backup**: (OPTIONAL) Copy provided systemd service files to CoreOS host to enable scheduled backup
  
 ### Backup Present Nessus Install
 
@@ -50,7 +50,7 @@ You can now log into your running Nessus instance at:
 
 https://(your-host-ip):8834
 
-### Create Local Host Backup Service
+### _(OPTIONAL)_ Create Local Host Backup Service
 
   * (as root) copy `backup-nessus.service` and `backup-nessus.timer` to `/etc/systemd/system` directory
   * run `systemctl daemon-reload && systemctl start backup-nessus.service` (should generate a nessus.tgz backup in '/home/core' or wherever you're running docker)
@@ -58,7 +58,7 @@ https://(your-host-ip):8834
   * edit line #8 to adjust backup cycle 
   * run `systemctl daemon-reload && systemctl restart backup-nessus-s3.service`
 
-### Create Amazon S3 Backup Service
+### _(OPTIONAL)_ Create Amazon S3 Backup Service
 
   * retrieve the gof3r binary from https://github.com/rlmcpherson/s3gof3r
   * (as root) copy `backup-nessus-s3.service` and `backup-nessus-s3.timer` to `/etc/systemd/system` directory
@@ -69,7 +69,7 @@ https://(your-host-ip):8834
   * edit line #8 to adjust backup cycle 
   * run `systemctl daemon-reload && systemctl restart backup-nessus-s3.service`
 
-### Create Image from Amazon S3 Backup
+### _(OPTIONAL)_ Create Image from Amazon S3 Backup
 
   * copy Nessus rpm to docker host
   * copy Dockerfile.Amazon_S3 to your docker host
