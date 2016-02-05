@@ -3,7 +3,7 @@
 # VERSION               0.0.1
 
 FROM	centos:6
-MAINTAINER JC Weir "jweir@ise.com"
+MAINTAINER JC Weir "devwatchdog@gmail.com"
 
 # get Nessus rpm (or whatever installation package you need)
 #
