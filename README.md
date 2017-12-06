@@ -58,7 +58,7 @@ This service writes a gzip compressed tarball file locally.
   * run `systemctl daemon-reload && systemctl start backup-nessus.service` (should generate a nessus.tgz backup in '/home/core' or wherever you're running docker)
   * run `systemctl start backup-nessus.timer` (is configured to run every hour)
   * edit line #8 to adjust backup cycle 
-  * run `systemctl daemon-reload && systemctl restart backup-nessus-s3.service`
+  * run `systemctl daemon-reload && systemctl restart backup-nessus.service`
 
 ### _(OPTIONAL)_ Create Amazon S3 Backup Service
 
